@@ -1,4 +1,5 @@
 import knex from "../config/knex";
+import { EILSEQ } from "constants";
 
 const table_name = "tasks";
 
@@ -6,7 +7,7 @@ class Task {
   static getAll() {
     return knex
       .from(table_name)
-      .select()
+      .select("oid", "title", "description")
       .then(results => Task.deserialize(results))
       .catch(err => err);
   }
@@ -46,8 +47,7 @@ class Task {
       let task = new Task();
       task.oid = data.oid ? data.oid : 0;
       task.title = data.title ? data.title : "";
-      task.description = data.description ? data.description : "";
-      task.done = data.done ? true : false;
+      task.done = data.done ? data.done : false;
       task.delete = data.delete ? data.delete : false;
       return task;
     });
